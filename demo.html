@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Resume Analyzer Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #0b1120; color: #e2e8f0; min-height: 100vh; }
+a { color: #60a5fa; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.back-link { display: block; padding: 12px 24px; font-size: 14px; border-bottom: 1px solid #1e293b; background: #0b1120; }
+.back-link i { margin-right: 6px; }
+
+/* Header */
+.app-header { background: #131c31; border-bottom: 1px solid #1e293b; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
+.app-header .logo { font-size: 20px; font-weight: 700; }
+.app-header .logo i { color: #3b82f6; margin-right: 8px; }
+.app-header .user-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#3b82f6,#8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; cursor: pointer; }
+
+/* Container */
+.container { max-width: 960px; margin: 0 auto; padding: 24px; }
+
+/* Upload Section */
+.upload-section { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 24px; border: 2px dashed #1e293b; border-radius: 16px; background: #131c31; cursor: pointer; transition: border-color .3s, background .3s; text-align: center; }
+.upload-section:hover, .upload-section.dragover { border-color: #3b82f6; background: rgba(59,130,246,.08); }
+.upload-section .upload-icon { font-size: 48px; color: #3b82f6; margin-bottom: 16px; }
+.upload-section h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.upload-section p { color: #64748b; font-size: 14px; }
+.upload-section input { display: none; }
+
+/* Upload Progress */
+.upload-progress { display: none; background: #131c31; border: 1px solid #1e293b; border-radius: 16px; padding: 24px; margin-top: 24px; }
+.upload-progress .file-info { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.upload-progress .file-info i { font-size: 24px; color: #3b82f6; }
+.upload-progress .file-info .file-name { font-size: 14px; font-weight: 500; }
+.upload-progress .file-info .file-size { font-size: 12px; color: #64748b; }
+.progress-bar-wrap { background: #1e293b; border-radius: 999px; height: 8px; overflow: hidden; }
+.progress-bar-fill { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg,#3b82f6,#8b5cf6); transition: width .1s; }
+.progress-label { font-size: 13px; color: #94a3b8; margin-top: 8px; text-align: right; }
+
+/* Results Section */
+.results-section { display: none; }
+
+/* Score Gauge */
+.score-card { background: #131c31; border: 1px solid #1e293b; border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 24px; }
+.score-card h3 { font-size: 14px; font-weight: 500; color: #94a3b8; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 1px; }
+.gauge-wrap { position: relative; width: 160px; height: 160px; margin: 0 auto 16px; }
+.gauge-wrap svg { transform: rotate(-90deg); }
+.gauge-bg { fill: none; stroke: #1e293b; stroke-width: 10; }
+.gauge-fill { fill: none; stroke: #22c55e; stroke-width: 10; stroke-linecap: round; stroke-dasharray: 439.8; stroke-dashoffset: 96.76; transition: stroke-dashoffset 1.5s ease, stroke .5s; }
+.gauge-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.gauge-center .score-num { font-size: 36px; font-weight: 700; }
+.gauge-center .score-label { font-size: 13px; color: #64748b; margin-top: 2px; }
+
+/* Stats */
+.stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #131c31; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; text-align: center; }
+.stat-card .stat-icon { font-size: 24px; margin-bottom: 8px; }
+.stat-card .stat-value { font-size: 28px; font-weight: 700; margin-bottom: 4px; }
+.stat-card .stat-label { font-size: 13px; color: #64748b; }
+
+/* Skills */
+.section-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.skills-card { background: #131c31; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+.skill-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.skill-row:last-child { margin-bottom: 0; }
+.skill-row .skill-name { width: 100px; font-size: 13px; font-weight: 500; flex-shrink: 0; }
+.skill-row .skill-bar-wrap { flex: 1; height: 8px; background: #1e293b; border-radius: 999px; overflow: hidden; }
+.skill-row .skill-bar-fill { height: 100%; border-radius: 999px; width: 0%; transition: width 1.5s ease; }
+.skill-row .skill-pct { width: 36px; text-align: right; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+
+/* Columns */
+.cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.col-card { background: #131c31; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; }
+.col-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.col-card ul { list-style: none; }
+.col-card li { padding: 8px 0; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; border-bottom: 1px solid #1e293b; }
+.col-card li:last-child { border-bottom: none; }
+.col-card li i { margin-top: 2px; flex-shrink: 0; font-size: 12px; }
+.strengths h4 i { color: #22c55e; }
+.strengths li i { color: #22c55e; }
+.weaknesses h4 i { color: #ef4444; }
+.weaknesses li i { color: #ef4444; }
+
+/* Skills Gap */
+.skills-gap-card { background: #131c31; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+.skills-gap-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: #f59e0b; }
+.skills-gap-card .gap-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.skills-gap-card .gap-tag { background: rgba(245,158,11,.12); color: #f59e0b; padding: 6px 14px; border-radius: 999px; font-size: 13px; font-weight: 500; }
+
+/* Suggestions */
+.suggestions-card { background: #131c31; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+.suggestions-card h4 { font-size: 14px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; color: #60a5fa; }
+.suggestion-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #1e293b; }
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: #3b82f6; cursor: pointer; flex-shrink: 0; }
+.suggestion-item label { font-size: 14px; cursor: pointer; flex: 1; }
+.suggestion-item.checked label { text-decoration: line-through; color: #64748b; }
+
+/* Reset btn */
+.reset-btn { width: 100%; padding: 14px; background: #3b82f6; color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .2s; }
+.reset-btn:hover { background: #2563eb; }
+
+@media (max-width: 640px) {
+  .container { padding: 16px; }
+  .stats-row { grid-template-columns: 1fr; }
+  .cols-2 { grid-template-columns: 1fr; }
+  .upload-section { padding: 40px 16px; }
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Project</a>
+
+<div class="app-header">
+  <div class="logo"><i class="fas fa-file-lines"></i>ResumeAI</div>
+  <div class="user-avatar"><i class="fas fa-user"></i></div>
+</div>
+
+<div class="container">
+
+  <!-- Upload Section -->
+  <div class="upload-section" id="upload-zone">
+    <div class="upload-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+    <h2>Drop your resume here or click to browse</h2>
+    <p>Supports PDF, DOCX, TXT &mdash; Max 10MB</p>
+    <input type="file" id="file-input" accept=".pdf,.docx,.txt">
+  </div>
+
+  <!-- Upload Progress -->
+  <div class="upload-progress" id="upload-progress">
+    <div class="file-info">
+      <i class="fas fa-file-pdf"></i>
+      <div>
+        <div class="file-name" id="file-name">resume.pdf</div>
+        <div class="file-size" id="file-size">2.4 MB</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">0%</div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section" id="results-section">
+
+    <!-- Score -->
+    <div class="score-card">
+      <h3>Overall Score</h3>
+      <div class="gauge-wrap">
+        <svg width="160" height="160" viewBox="0 0 160 160">
+          <circle class="gauge-bg" cx="80" cy="80" r="70"/>
+          <circle class="gauge-fill" id="gauge-fill" cx="80" cy="80" r="70"/>
+        </svg>
+        <div class="gauge-center">
+          <div class="score-num" id="score-num">78</div>
+          <div class="score-label">/ 100</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon" style="color:#3b82f6;"><i class="fas fa-briefcase"></i></div>
+        <div class="stat-value" id="stat-experience">8</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color:#8b5cf6;"><i class="fas fa-code"></i></div>
+        <div class="stat-value" id="stat-skills">12</div>
+        <div class="stat-label">Skills Detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="color:#22c55e;"><i class="fas fa-tags"></i></div>
+        <div class="stat-value" id="stat-keywords">24</div>
+        <div class="stat-label">Keywords Matched</div>
+      </div>
+    </div>
+
+    <!-- Skills Breakdown -->
+    <h3 class="section-title"><i class="fas fa-chart-simple" style="color:#3b82f6;"></i> Skills Breakdown</h3>
+    <div class="skills-card" id="skills-card">
+      <div class="skill-row"><span class="skill-name">JavaScript</span><div class="skill-bar-wrap"><div class="skill-bar-fill" data-pct="90" style="background:#3b82f6;"></div></div><span class="skill-pct" id="pct-js">0%</span></div>
+      <div class="skill-row"><span class="skill-name">React</span><div class="skill-bar-wrap"><div class="skill-bar-fill" data-pct="85" style="background:#8b5cf6;"></div></div><span class="skill-pct" id="pct-react">0%</span></div>
+      <div class="skill-row"><span class="skill-name">TypeScript</span><div class="skill-bar-wrap"><div class="skill-bar-fill" data-pct="75" style="background:#06b6d4;"></div></div><span class="skill-pct" id="pct-ts">0%</span></div>
+      <div class="skill-row"><span class="skill-name">Node.js</span><div class="skill-bar-wrap"><div class="skill-bar-fill" data-pct="70" style="background:#22c55e;"></div></div><span class="skill-pct" id="pct-node">0%</span></div>
+      <div class="skill-row"><span class="skill-name">Python</span><div class="skill-bar-wrap"><div class="skill-bar-fill" data-pct="45" style="background:#f59e0b;"></div></div><span class="skill-pct" id="pct-py">0%</span></div>
+    </div>
+
+    <!-- Strengths / Weaknesses -->
+    <div class="cols-2">
+      <div class="col-card strengths">
+        <h4><i class="fas fa-circle-check"></i> Strengths</h4>
+        <ul>
+          <li><i class="fas fa-circle-check"></i> Strong frontend experience</li>
+          <li><i class="fas fa-circle-check"></i> Modern framework expertise</li>
+          <li><i class="fas fa-circle-check"></i> Clean code practices</li>
+        </ul>
+      </div>
+      <div class="col-card weaknesses">
+        <h4><i class="fas fa-circle-exclamation"></i> Weaknesses</h4>
+        <ul>
+          <li><i class="fas fa-circle-exclamation"></i> Limited cloud experience</li>
+          <li><i class="fas fa-circle-exclamation"></i> No CI/CD knowledge</li>
+          <li><i class="fas fa-circle-exclamation"></i> Missing soft skills section</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Skills Gap -->
+    <div class="skills-gap-card">
+      <h4><i class="fas fa-triangle-exclamation"></i> Skills Gap</h4>
+      <div class="gap-tags">
+        <span class="gap-tag">Docker / Kubernetes</span>
+        <span class="gap-tag">AWS / GCP</span>
+        <span class="gap-tag">CI/CD Pipelines</span>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="suggestions-card" id="suggestions-card">
+      <h4><i class="fas fa-lightbulb"></i> Improvement Suggestions</h4>
+      <div class="suggestion-item"><input type="checkbox" id="sug1"><label for="sug1">Add GitHub profile link</label></div>
+      <div class="suggestion-item"><input type="checkbox" id="sug2"><label for="sug2">Include portfolio URL</label></div>
+      <div class="suggestion-item"><input type="checkbox" id="sug3"><label for="sug3">Quantify achievements</label></div>
+      <div class="suggestion-item"><input type="checkbox" id="sug4"><label for="sug4">Add certifications section</label></div>
+    </div>
+
+    <!-- Reset -->
+    <button class="reset-btn" id="reset-btn"><i class="fas fa-arrow-rotate-left"></i> Analyze Another Resume</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  const uploadZone = document.getElementById('upload-zone');
+  const fileInput = document.getElementById('file-input');
+  const progressSection = document.getElementById('upload-progress');
+  const progressFill = document.getElementById('progress-fill');
+  const progressLabel = document.getElementById('progress-label');
+  const fileName = document.getElementById('file-name');
+  const fileSize = document.getElementById('file-size');
+  const resultsSection = document.getElementById('results-section');
+
+  let animationFrame = null;
+
+  function formatSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  function handleFile(file) {
+    fileName.textContent = file.name;
+    fileSize.textContent = formatSize(file.size);
+    uploadZone.style.display = 'none';
+    progressSection.style.display = 'block';
+    resultsSection.style.display = 'none';
+
+    let pct = 0;
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+
+    function animate() {
+      pct += Math.random() * 4 + 1;
+      if (pct > 100) pct = 100;
+      progressFill.style.width = pct + '%';
+      progressLabel.textContent = Math.round(pct) + '%';
+      if (pct < 100) {
+        animationFrame = requestAnimationFrame(animate);
+      } else {
+        progressSection.style.display = 'none';
+        resultsSection.style.display = 'block';
+        animateResults();
+      }
+    }
+    animate();
+  }
+
+  function animateResults() {
+    // Gauge
+    const gauge = document.getElementById('gauge-fill');
+    const scoreEl = document.getElementById('score-num');
+    const score = 78;
+    const circumference = 2 * Math.PI * 70;
+    gauge.style.strokeDasharray = circumference;
+    const offset = circumference - (score / 100) * circumference;
+    
+    // Color based on score
+    let color = '#22c55e';
+    if (score < 50) color = '#ef4444';
+    else if (score < 70) color = '#f59e0b';
+    gauge.style.stroke = color;
+    
+    setTimeout(() => {
+      gauge.style.strokeDashoffset = offset;
+    }, 100);
+    
+    let count = 0;
+    const countInterval = setInterval(() => {
+      count++;
+      scoreEl.textContent = count;
+      if (count >= score) clearInterval(countInterval);
+    }, 15);
+
+    // Skills bars
+    const bars = document.querySelectorAll('.skill-bar-fill[data-pct]');
+    bars.forEach(bar => {
+      const pct = parseInt(bar.getAttribute('data-pct'));
+      setTimeout(() => {
+        bar.style.width = pct + '%';
+        const pctEl = bar.closest('.skill-row').querySelector('.skill-pct');
+        animatePct(pctEl, pct);
+      }, 300);
+    });
+
+    // Stats
+    animateStat('stat-experience', 8);
+    animateStat('stat-skills', 12);
+    animateStat('stat-keywords', 24);
+  }
+
+  function animatePct(el, target) {
+    let cur = 0;
+    const int = setInterval(() => {
+      cur++;
+      el.textContent = cur + '%';
+      if (cur >= target) clearInterval(int);
+    }, 12);
+  }
+
+  function animateStat(id, target) {
+    const el = document.getElementById(id);
+    let cur = 0;
+    const int = setInterval(() => {
+      cur++;
+      el.textContent = cur;
+      if (cur >= target) clearInterval(int);
+    }, 20);
+  }
+
+  // Drag & drop
+  uploadZone.addEventListener('dragover', (e) => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+  uploadZone.addEventListener('dragleave', () => { uploadZone.classList.remove('dragover'); });
+  uploadZone.addEventListener('drop', (e) => { e.preventDefault(); uploadZone.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+  uploadZone.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => { if (fileInput.files.length) handleFile(fileInput.files[0]); });
+
+  // Suggestions checkboxes
+  document.querySelectorAll('.suggestion-item input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', function() {
+      this.closest('.suggestion-item').classList.toggle('checked', this.checked);
+    });
+  });
+
+  // Reset
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+    uploadZone.style.display = 'flex';
+    progressSection.style.display = 'none';
+    resultsSection.style.display = 'none';
+    progressFill.style.width = '0%';
+    progressLabel.textContent = '0%';
+    fileInput.value = '';
+    document.querySelectorAll('.skill-bar-fill[data-pct]').forEach(b => b.style.width = '0%');
+    document.querySelectorAll('.skill-pct').forEach(el => el.textContent = '0%');
+    document.getElementById('score-num').textContent = '0';
+    document.getElementById('stat-experience').textContent = '0';
+    document.getElementById('stat-skills').textContent = '0';
+    document.getElementById('stat-keywords').textContent = '0';
+    const gauge = document.getElementById('gauge-fill');
+    gauge.style.strokeDashoffset = 439.8;
+    gauge.style.stroke = '#22c55e';
+    document.querySelectorAll('.suggestion-item').forEach(item => item.classList.remove('checked'));
+    document.querySelectorAll('.suggestion-item input[type="checkbox"]').forEach(cb => cb.checked = false);
+  });
+})();
+</script>
+</body>
+</html>
