@@ -1,6 +1,7 @@
 import { useState, useRef, KeyboardEvent } from 'react';
 import { analyzeResume } from '../api/client';
 import type { ResumeAnalysis } from '../types';
+import { showToast } from '../utils/toast';
 
 interface Props {
   onAnalysis: (data: ResumeAnalysis, fileName: string) => void;
@@ -31,9 +32,12 @@ export default function ResumeUpload({ onAnalysis }: Props) {
     setLoading(true); setError('');
     try {
       const res = await analyzeResume(file);
+      showToast('Resume analyzed successfully!', 'success');
       onAnalysis(res.data.analysis, res.data.fileName);
     } catch (e: any) {
-      setError(e.response?.data?.error || 'Analysis failed. Please try again.');
+      const msg = e.response?.data?.error || 'Analysis failed. Please try again.';
+      setError(msg);
+      showToast(msg, 'error');
     } finally { setLoading(false); }
   };
 

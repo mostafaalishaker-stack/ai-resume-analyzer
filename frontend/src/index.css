@@ -1,0 +1,19 @@
+.skeleton { background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+.skeleton-title { height: 20px; margin-bottom: 12px; width: 50%; }
+.skeleton-card { background: #131c31; border: 1px solid #1e293b; border-radius: 16; padding: 24; }
+.skeleton-table { width: 100%; }
+.skeleton-table td { padding: 8px; }
+.empty-state { text-align: center; padding: 60px 20px; color: #64748b; }
+.empty-state .empty-icon { font-size: 48px; margin-bottom: 16px; }
+.empty-state h3 { font-size: 18px; color: #94a3b8; margin-bottom: 8px; }
+.empty-state p { font-size: 14px; color: #64748b; margin-bottom: 16px; }
+#toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+.toast { display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 500; min-width: 280px; max-width: 420px; box-shadow: 0 8px 24px rgba(0,0,0,.4); transition: opacity .3s ease; animation: slideIn .3s ease; }
+@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+.toast.success { background: #064e3b; border: 1px solid #22c55e; color: #bbf7d0; }
+.toast.error { background: #450a0a; border: 1px solid #ef4444; color: #fecaca; }
+.toast.info { background: #1e1b4b; border: 1px solid #6366f1; color: #c7d2fe; }
+.toast-close { background: none; border: none; color: inherit; cursor: pointer; font-size: 18px; margin-left: auto; opacity: .7; padding: 0 4px; }
+.toast-close:hover { opacity: 1; }

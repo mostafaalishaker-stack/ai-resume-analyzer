@@ -1,4 +1,5 @@
 import type { ResumeAnalysis } from '../types';
+import { EmptyState } from './EmptyState';
 
 interface Props {
   analysis: ResumeAnalysis;
@@ -30,19 +31,27 @@ function Section({ title, items, icon, color }: { title: string; items: string[]
       <h3 style={{ fontSize: '1.05rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, color: '#f1f5f9' }}>
         <i className={icon} style={{ color }}></i> {title}
       </h3>
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {items.map((item, i) => (
-          <li key={i} style={{ color: '#cbd5e1', fontSize: '.9rem', padding: '6px 0', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-            <span style={{ color, marginTop: 2 }}>•</span> {item}
-          </li>
-        ))}
-      </ul>
+      {items.length === 0 ? (
+        <p style={{ color: '#64748b', fontSize: '.85rem' }}>No items to display.</p>
+      ) : (
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          {items.map((item, i) => (
+            <li key={i} style={{ color: '#cbd5e1', fontSize: '.9rem', padding: '6px 0', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+              <span style={{ color, marginTop: 2 }}>•</span> {item}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
 
 export default function Results({ analysis, fileName, onReset }: Props) {
   const { score, strengths, weaknesses, skillsFound, missingSkills, improvements, recommendedTitles, experienceLevel } = analysis;
+
+  if (!analysis.score && !analysis.strengths?.length && !analysis.weaknesses?.length) {
+    return <EmptyState icon="📄" title="No analysis data" message="The analysis returned incomplete results. Try uploading a different resume." action={{ label: 'Try Again', onClick: onReset }} />;
+  }
 
   return (
     <div>
@@ -62,7 +71,9 @@ export default function Results({ analysis, fileName, onReset }: Props) {
         <ScoreRing score={score} />
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignContent: 'start' }}>
           <p style={{ width: '100%', color: '#94a3b8', fontSize: '.9rem', marginBottom: 8 }}>Recommended Roles:</p>
-          {recommendedTitles.map((t, i) => (
+          {recommendedTitles.length === 0 ? (
+            <p style={{ color: '#64748b', fontSize: '.85rem' }}>No recommendations available.</p>
+          ) : recommendedTitles.map((t, i) => (
             <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(99,102,241,.1)', color: '#818cf8', fontSize: '.85rem', fontWeight: 500 }}>{t}</span>
           ))}
         </div>
@@ -78,17 +89,21 @@ export default function Results({ analysis, fileName, onReset }: Props) {
           <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#67e8f9' }}>
             <i className="fas fa-check-circle"></i> Skills Found
           </h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {skillsFound.length === 0 ? (
+            <p style={{ color: '#64748b', fontSize: '.85rem' }}>No skills detected.</p>
+          ) : <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {skillsFound.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(6,182,212,.1)', color: '#67e8f9', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
-          </div>
+          </div>}
         </div>
         <div style={{ flex: 1, minWidth: 280, background: '#131c31', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
           <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#c084fc' }}>
             <i className="fas fa-plus-circle"></i> Missing Skills
           </h3>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {missingSkills.length === 0 ? (
+            <p style={{ color: '#64748b', fontSize: '.85rem' }}>No missing skills identified.</p>
+          ) : <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
             {missingSkills.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(168,85,247,.1)', color: '#c084fc', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
-          </div>
+          </div>}
         </div>
       </div>
 

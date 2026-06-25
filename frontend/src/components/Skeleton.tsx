@@ -1,0 +1,3 @@
+export function SkeletonCard() { return <div className="skeleton-card"><div className="skeleton skeleton-title"/><div className="skeleton skeleton-text"/><div className="skeleton skeleton-text" style={{width:'60%'}}/></div>; }
+export function SkeletonList({count=3}:{count?:number}) { return <>{Array.from({length:count}).map((_,i)=><div key={i} className="skeleton skeleton-text" style={{marginBottom:8}}/>)}</>; }
+export function SkeletonTable({rows=4,cols=3}:{rows?:number;cols?:number}) { return <table className="skeleton-table"><tbody>{Array.from({length:rows}).map((_,r)=><tr key={r}>{Array.from({length:cols}).map((_,c)=><td key={c}><div className="skeleton skeleton-text"/></td>)}</tr>)}</tbody></table>; }
