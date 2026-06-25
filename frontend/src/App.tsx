@@ -35,7 +35,7 @@ export default function App() {
         <div style={{ marginBottom: 40 }}>
           <div style={styles.badge}><i className="fas fa-robot"></i> AI-Powered</div>
           <h1 style={styles.title}>Analyze Your Resume</h1>
-          <p style={styles.desc}>Upload your resume (PDF) and get instant AI-powered feedback, scores, and improvement suggestions.</p>
+          <p style={styles.desc}>Upload your resume (PDF, TXT, or DOCX) and get instant AI-powered feedback, scores, and improvement suggestions.</p>
         </div>
         {!analysis ? (
           <ResumeUpload onAnalysis={handleAnalysis} />

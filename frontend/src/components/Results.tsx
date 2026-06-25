@@ -27,12 +27,12 @@ function ScoreRing({ score }: { score: number }) {
 function Section({ title, items, icon, color }: { title: string; items: string[]; icon: string; color: string }) {
   return (
     <div style={{ background: '#131c31', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
-      <h3 style={{ fontSize: '1.05rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+      <h3 style={{ fontSize: '1.05rem', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8, color: '#f1f5f9' }}>
         <i className={icon} style={{ color }}></i> {title}
       </h3>
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {items.map((item, i) => (
-          <li key={i} style={{ color: '#94a3b8', fontSize: '.9rem', padding: '6px 0', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+          <li key={i} style={{ color: '#cbd5e1', fontSize: '.9rem', padding: '6px 0', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
             <span style={{ color, marginTop: 2 }}>•</span> {item}
           </li>
         ))}
@@ -49,9 +49,11 @@ export default function Results({ analysis, fileName, onReset }: Props) {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, flexWrap: 'wrap', gap: 16 }}>
         <div>
           <p style={{ color: '#94a3b8', fontSize: '.85rem' }}>File: {fileName}</p>
-          <p style={{ color: '#6366f1', fontSize: '.85rem', fontWeight: 600 }}>Level: {experienceLevel}</p>
+          <p style={{ color: '#818cf8', fontSize: '.85rem', fontWeight: 600 }}>Level: {experienceLevel}</p>
         </div>
-        <button onClick={onReset} style={{ padding: '10px 24px', borderRadius: 12, background: '#6366f1', color: '#fff', fontWeight: 600, fontSize: '.9rem', cursor: 'pointer', border: 'none', transition: '.3s' }}>
+        <button onClick={onReset} style={{ padding: '10px 24px', borderRadius: 12, background: '#6366f1', color: '#fff', fontWeight: 600, fontSize: '.9rem', cursor: 'pointer', border: 'none', transition: '.3s' }}
+          onFocus={e => { e.currentTarget.style.outline = '2px solid #a5b4fc'; e.currentTarget.style.outlineOffset = '2px'; }}
+          onBlur={e => { e.currentTarget.style.outline = 'none'; }}>
           <i className="fas fa-upload"></i> Analyze Another
         </button>
       </div>
@@ -61,7 +63,7 @@ export default function Results({ analysis, fileName, onReset }: Props) {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignContent: 'start' }}>
           <p style={{ width: '100%', color: '#94a3b8', fontSize: '.9rem', marginBottom: 8 }}>Recommended Roles:</p>
           {recommendedTitles.map((t, i) => (
-            <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(99,102,241,.1)', color: '#6366f1', fontSize: '.85rem', fontWeight: 500 }}>{t}</span>
+            <span key={i} style={{ padding: '6px 14px', borderRadius: 8, background: 'rgba(99,102,241,.1)', color: '#818cf8', fontSize: '.85rem', fontWeight: 500 }}>{t}</span>
           ))}
         </div>
       </div>
@@ -73,19 +75,19 @@ export default function Results({ analysis, fileName, onReset }: Props) {
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginBottom: 20 }}>
         <div style={{ flex: 1, minWidth: 280, background: '#131c31', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
-          <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#06b6d4' }}>
+          <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#67e8f9' }}>
             <i className="fas fa-check-circle"></i> Skills Found
           </h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {skillsFound.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(6,182,212,.1)', color: '#06b6d4', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
+            {skillsFound.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(6,182,212,.1)', color: '#67e8f9', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
           </div>
         </div>
         <div style={{ flex: 1, minWidth: 280, background: '#131c31', border: '1px solid #1e293b', borderRadius: 16, padding: 24 }}>
-          <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#a855f7' }}>
+          <h3 style={{ fontSize: '1.05rem', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8, color: '#c084fc' }}>
             <i className="fas fa-plus-circle"></i> Missing Skills
           </h3>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {missingSkills.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(168,85,247,.1)', color: '#a855f7', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
+            {missingSkills.map((s, i) => <span key={i} style={{ padding: '4px 10px', borderRadius: 6, background: 'rgba(168,85,247,.1)', color: '#c084fc', fontSize: '.8rem', fontWeight: 500 }}>{s}</span>)}
           </div>
         </div>
       </div>
@@ -93,7 +95,9 @@ export default function Results({ analysis, fileName, onReset }: Props) {
       <Section title="Actionable Improvements" items={improvements} icon="fas fa-lightbulb" color="#eab308" />
 
       <div style={{ marginTop: 24, textAlign: 'center' }}>
-        <a href="../" style={{ color: '#6366f1', textDecoration: 'none', fontSize: '.9rem' }}><i className="fas fa-arrow-left"></i> Back to Portfolio</a>
+        <a href="../" tabIndex={0} style={{ color: '#818cf8', textDecoration: 'none', fontSize: '.9rem' }}
+          onFocus={e => { e.currentTarget.style.outline = '2px solid #a5b4fc'; e.currentTarget.style.outlineOffset = '2px'; }}
+          onBlur={e => { e.currentTarget.style.outline = 'none'; }}><i className="fas fa-arrow-left"></i> Back to Portfolio</a>
       </div>
     </div>
   );

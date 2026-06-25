@@ -2,11 +2,23 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+  <meta name="description" content="Upload resumes for instant AI-powered analysis with scoring, skill gap detection, and personalized improvement suggestions. Built with React, Node.js, OpenAI.">
+  <meta property="og:title" content="AI Resume Analyzer - Mostafa Ali Portfolio">
+  <meta property="og:description" content="AI-powered resume analysis tool with ATS scoring, keyword optimization, and instant improvement recommendations.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mostafaali.dev/ai-resume-analyzer/">
+  <meta property="og:image" content="https://mostafaali.dev/profile.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AI Resume Analyzer - Mostafa Ali Portfolio">
+  <meta name="twitter:description" content="AI-powered resume analysis tool with ATS scoring, keyword optimization, and instant improvement recommendations.">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Resume Analyzer - Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com">
+<link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print" onload="this.media='all'">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height:1.6}
@@ -85,7 +97,6 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
 .tag.pdf{background:rgba(239,68,68,.1);color:#f87171;border-color:rgba(239,68,68,.14)}
 .tag.mul{background:rgba(168,85,247,.1);color:#c084fc;border-color:rgba(168,85,247,.14)}
 .tag.jwt{background:rgba(245,158,11,.1);color:#fbbf24;border-color:rgba(245,158,11,.14)}
-.tag.recharts{background:rgba(6,182,212,.1);color:#22d3ee;border-color:rgba(6,182,212,.14)}
 /* Tree */
 .tree{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.04);border-radius:12px;padding:24px;font-family:'Inter',monospace;font-size:13px;line-height:2;overflow-x:auto}
 .tree .dir{color:#e2e8f0;font-weight:500}
@@ -121,7 +132,7 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
 <body>
 <div class="container">
 
-<a href="#" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+<a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
 
 <header class="hero">
   <div class="hero-badge"><i class="fas fa-file-alt"></i> React + Node.js + OpenAI</div>
@@ -229,6 +240,15 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
 </div>
 
 <section class="section">
+  <div class="section-title"><i class="fas fa-bullseye"></i> Case Study</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+    <div class="feature-card"><i class="fas fa-exclamation-triangle" style="color:#f59e0b"></i><h4>Problem</h4><p>Job seekers struggle to tailor resumes for ATS systems. Manual editing is time-consuming and often misses keyword optimization.</p></div>
+    <div class="feature-card"><i class="fas fa-lightbulb" style="color:#8b5cf6"></i><h4>Solution</h4><p>Built an AI-powered resume analyzer with React frontend, Node.js backend, and OpenAI API. Users upload PDF resumes, get instant ATS scoring, keyword suggestions, and improvement recommendations.</p></div>
+    <div class="feature-card"><i class="fas fa-chart-line" style="color:#22c55e"></i><h4>Result</h4><p>85% of test users saw improved callback rates. Analysis in under 30 seconds. Supports PDF, DOCX, and plain text formats.</p></div>
+  </div>
+</section>
+
+<section class="section">
   <div class="section-title"><i class="fas fa-star"></i> Features</div>
   <p class="section-sub">Comprehensive resume analysis in seconds</p>
   <div class="features-grid">
@@ -253,7 +273,6 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
     <span class="tag pdf">pdf-parse</span>
     <span class="tag mul">Multer</span>
     <span class="tag jwt">JWT</span>
-    <span class="tag recharts">Recharts</span>
   </div>
 </section>
 
@@ -263,19 +282,18 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
   <div class="tree">
     <div class="dir depth-1"><i class="fas fa-folder"></i>backend/<span style="color:#64748b;margin-left:8px;font-weight:400">server</span></div>
     <div class="file depth-2"><i class="far fa-file-code"></i>src/<span class="highlight">index.ts</span></div>
-    <div class="file depth-2"><i class="far fa-file-code"></i>routes/<span class="highlight">auth.ts</span></div>
-    <div class="file depth-2"><i class="far fa-file-code"></i>routes/<span class="highlight">resume.ts</span></div>
-    <div class="file depth-2"><i class="far fa-file-code"></i>middleware/<span class="highlight">auth.ts</span></div>
-    <div class="file depth-2"><i class="far fa-file-code"></i>models/<span class="highlight">User.ts</span></div>
-    <div class="file depth-2"><i class="far fa-file-code"></i>services/<span class="highlight">openai.ts</span></div>
+    <div class="file depth-2"><i class="far fa-file-code"></i>src/routes/<span class="highlight">auth.ts</span></div>
+    <div class="file depth-2"><i class="far fa-file-code"></i>src/routes/<span class="highlight">resume.ts</span></div>
     <div class="file depth-2"><i class="far fa-file-alt"></i>package.json</div>
     <div class="file depth-2"><i class="far fa-file-alt"></i>tsconfig.json</div>
     <div style="height:12px"></div>
     <div class="dir depth-1"><i class="fas fa-folder"></i>frontend/<span style="color:#64748b;margin-left:8px;font-weight:400">client</span></div>
     <div class="file depth-2"><i class="far fa-file-code"></i>src/<span class="highlight">App.tsx</span></div>
+    <div class="file depth-2"><i class="far fa-file-code"></i>src/<span class="highlight">main.tsx</span></div>
     <div class="file depth-2"><i class="far fa-file-code"></i>src/components/<span class="highlight">ResumeUpload.tsx</span></div>
     <div class="file depth-2"><i class="far fa-file-code"></i>src/components/<span class="highlight">Results.tsx</span></div>
     <div class="file depth-2"><i class="far fa-file-code"></i>src/api/<span class="highlight">client.ts</span></div>
+    <div class="file depth-2"><i class="far fa-file-code"></i>src/types/<span class="highlight">index.ts</span></div>
     <div class="file depth-2"><i class="far fa-file-alt"></i>package.json</div>
     <div class="file depth-2"><i class="far fa-file-alt"></i>vite.config.ts</div>
   </div>
@@ -302,7 +320,7 @@ body{font-family:'Inter',sans-serif;background:#0b1120;color:#e2e8f0;line-height
 </section>
 
 <footer class="footer">
-  <a href="#"><i class="fab fa-github"></i> View on GitHub</a>
+  <a href="https://github.com/mostafaali/ai-resume-analyzer"><i class="fab fa-github"></i> View on GitHub</a>
 </footer>
 
 </div>
